@@ -1,0 +1,11 @@
+{
+  "total_tokens": 7500,
+  "daily_tokens": {
+    "2026-03-12": {
+      "prompt": 5000,
+      "completion": 2500,
+      "total": 7500
+    }
+  },
+  "last_update": "2026-03-12T10:17:56.096349"
+}

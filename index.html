@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Pixel 公司模擬器</title>
+    <style>
+        /* ===== Pixel Style Base ===== */
+        :root {
+            --pixel-bg: #1a1c2c;
+            --pixel-bg-light: #29366f;
+            --pixel-primary: #5d275d;
+            --pixel-accent: #b13e53;
+            --pixel-success: #38b764;
+            --pixel-warning: #ffcd75;
+            --pixel-text: #f4f4f4;
+            --pixel-text-dim: #a7a7a7;
+            --pixel-border: #000000;
+            --pixel-shadow: #3b5dc9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: pixelated;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--pixel-bg);
+            color: var(--pixel-text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ===== Container ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            text-align: center;
+            padding: 20px;
+            border: 4px solid var(--pixel-border);
+            background: var(--pixel-primary);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0 var(--pixel-border);
+        }
+
+        /* ===== Pixel Button ===== */
+        .pixel-btn {
+            background: var(--pixel-shadow);
+            color: var(--pixel-text);
+            border: 4px solid var(--pixel-border);
+            padding: 12px 24px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.1s;
+        }
+
+        .pixel-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--pixel-border);
+        }
+
+        .pixel-btn:active {
+            transform: translate(0, 0);
+            box-shadow: none;
+        }
+
+        .pixel-btn.primary {
+            background: var(--pixel-accent);
+        }
+
+        .pixel-btn.success {
+            background: var(--pixel-success);
+        }
+
+        /* ===== Section ===== */
+        .section {
+            border: 4px solid var(--pixel-border);
+            background: var(--pixel-bg-light);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            background: var(--pixel-primary);
+            padding: 12px 16px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 4px solid var(--pixel-border);
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        /* ===== Dashboard Stats ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--pixel-bg);
+            border: 4px solid var(--pixel-border);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            color: var(--pixel-warning);
+            text-shadow: 2px 2px 0 var(--pixel-border);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--pixel-text-dim);
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* ===== Character Creator ===== */
+        .character-creator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .avatar-option {
+            width: 64px;
+            height: 64px;
+            border: 4px solid var(--pixel-border);
+            background: var(--pixel-bg);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            transition: all 0.1s;
+        }
+
+        .avatar-option:hover {
+            background: var(--pixel-shadow);
+        }
+
+        .avatar-option.selected {
+            background: var(--pixel-accent);
+            border-color: var(--pixel-warning);
+        }
+
+        .pixel-input {
+            background: var(--pixel-bg);
+            border: 4px solid var(--pixel-border);
+            color: var(--pixel-text);
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .pixel-input:focus {
+            outline: none;
+            border-color: var(--pixel-warning);
+        }
+
+        /* ===== Employee List ===== */
+        .employee-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .employee-card {
+            background: var(--pixel-bg);
+            border: 4px solid var(--pixel-border);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .employee-card:hover {
+            background: var(--pixel-shadow);
+        }
+
+        .employee-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--pixel-primary);
+            border: 4px solid var(--pixel-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .employee-info {
+            flex: 1;
+        }
+
+        .employee-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .employee-role {
+            font-size: 12px;
+            color: var(--pixel-text-dim);
+        }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--pixel-bg-light);
+            border: 4px solid var(--pixel-border);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: var(--pixel-primary);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--pixel-border);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--pixel-text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .skill-tag {
+            background: var(--pixel-bg);
+            border: 2px solid var(--pixel-border);
+            padding: 4px 8px;
+            font-size: 11px;
+            color: var(--pixel-warning);
+        }
+
+        .schedule-list {
+            margin-top: 12px;
+        }
+
+        .schedule-item {
+            background: var(--pixel-bg);
+            border: 2px solid var(--pixel-border);
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .schedule-item .name {
+            color: var(--pixel-success);
+            font-weight: bold;
+        }
+
+        .schedule-item .time {
+            color: var(--pixel-text-dim);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: var(--pixel-text-dim);
+        }
+
+        /* ===== Tabs ===== */
+        .tabs {
+            display: flex;
+            border-bottom: 4px solid var(--pixel-border);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: var(--pixel-bg-light);
+            border: none;
+            color: var(--pixel-text);
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .tab:hover {
+            background: var(--pixel-shadow);
+        }
+
+        .tab.active {
+            background: var(--pixel-primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== Character Preview ===== */
+        .character-preview {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .character-display {
+            width: 96px;
+            height: 96px;
+            background: var(--pixel-primary);
+            border: 4px solid var(--pixel-border);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .character-display-name {
+            font-size: 18px;
+            color: var(--pixel-warning);
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--pixel-text-dim);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏢 OpenClaw Pixel 公司</h1>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="dashboard">📊 儀表板</button>
+            <button class="tab" data-tab="employees">👥 員工列表</button>
+            <button class="tab" data-tab="character">🎮 創建角色</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="section">
+                <div class="section-title">公司概覽</div>
+                <div class="section-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="agentCount">0</div>
+                            <div class="stat-label">員工數量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="skillCount">0</div>
+                            <div class="stat-label">技能數量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="scheduleCount">0</div>
+                            <div class="stat-label">排程數量</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="activeJobs">0</div>
+                            <div class="stat-label">啟用排程</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Tab -->
+        <div id="employees" class="tab-content">
+            <div class="section">
+                <div class="section-title">OpenClaw 員工</div>
+                <div class="section-content">
+                    <div class="employee-list" id="employeeList">
+                        <!-- Employee cards will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Tab -->
+        <div id="character" class="tab-content">
+            <div class="section">
+                <div class="section-title">創建你的 Pixel 角色</div>
+                <div class="section-content">
+                    <div class="character-creator">
+                        <div class="avatar-grid" id="avatarGrid">
+                            <!-- Avatars -->
+                        </div>
+                        <input type="text" class="pixel-input" id="characterName" placeholder="輸入角色名稱..." maxlength="20">
+                        <button class="pixel-btn success" id="saveCharacter">儲存角色</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="characterPreviewSection" style="display: none;">
+                <div class="section-title">角色預覽</div>
+                <div class="section-content">
+                    <div class="character-preview">
+                        <div class="character-display" id="previewAvatar">👤</div>
+                        <div class="character-display-name" id="previewName"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            OpenClaw Pixel 公司模擬器 MVP | 數據來源：~/.openclaw/
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span id="modalTitle">員工詳情</span>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== Data =====
+        // Real OpenClaw data - loaded from localStorage for demo
+        // In production, this would be fetched from OpenClaw APIs
+        const OPENCLAW_DATA = {
+            agents: ['job-hunter', 'main', 'salmon', 'snow'],
+            skills: [
+                'ai-x-threads-monitor', 'brand-guardian', 'chirp', 'engineering-ai-engineer',
+                'engineering-autonomous-optimization-architect', 'engineering-backend-architect',
+                'engineering-data-engineer', 'engineering-devops-automator',
+                'engineering-frontend-developer', 'engineering-mobile-app-builder',
+                'engineering-rapid-prototyper', 'engineering-security-engineer',
+                'engineering-senior-developer', 'engineering-technical-writer',
+                'image-prompt-engineer', 'inclusive-visuals-specialist',
+                'marketing-app-store-optimizer', 'marketing-content-creator',
+                'marketing-growth-hacker', 'marketing-instagram-curator',
+                'marketing-reddit-community-builder', 'marketing-social-media-strategist',
+                'marketing-tiktok-strategist', 'marketing-twitter-engager',
+                'marketing-wechat-official-account', 'marketing-xiaohongshu-specialist',
+                'marketing-zhihu-strategist', 'pm-experiment-tracker', 'pm-project-shepherd',
+                'pm-senior', 'pm-studio-operations', 'pm-studio-producer',
+                'product-behavioral-nudge-engine', 'product-feedback-synthesizer',
+                'product-sprint-prioritizer', 'product-trend-researcher',
+                'specialized-agentic-identity-trust', 'specialized-agents-orchestrator',
+                'specialized-cultural-intelligence-strategist', 'specialized-data-analytics-reporter',
+                'specialized-data-consolidation-agent', 'specialized-developer-advocate',
+                'specialized-lsp-index-engineer', 'specialized-report-distribution-agent',
+                'specialized-sales-data-extraction-agent', 'support-analytics-reporter',
+                'support-executive-summary-generator', 'support-finance-tracker',
+                'support-infrastructure-maintainer', 'support-legal-compliance-checker',
+                'support-support-responder', 'testing-accessibility-auditor', 'testing-api-tester',
+                'testing-evidence-collector', 'testing-performance-benchmarker',
+                'testing-reality-checker', 'testing-test-results-analyzer',
+                'testing-tool-evaluator', 'testing-workflow-optimizer', 'ui-designer',
+                'ux-architect', 'ux-researcher', 'video-maker', 'visual-storyteller',
+                'whimsy-injector', 'xr-macos-spatial-metal-engineer',
+                'xr-terminal-integration-specialist', 'xr-visionos-spatial-engineer',
+                'xr-xr-cockpit-interaction-specialist', 'xr-xr-immersive-developer',
+                'xr-xr-interface-architect', 'youtube-clipper'
+            ],
+            // Real cron jobs from ~/.openclaw/cron/jobs.json
+            schedules: [
+                { name: 'Daily Finance Influencer Tracking', time: '0 9 * * *', enabled: false },
+                { name: 'self_evolution_backup', time: '0 4 * * *', enabled: true },
+                { name: 'hourly_health_check', time: '0 * * * *', enabled: true },
+                { name: 'AI News Monitor', time: '0 */6 * * *', enabled: true },
+                { name: 'Daily Digest', time: '0 8 * * *', enabled: true },
+                { name: 'Weekly Report', time: '0 9 * * 1', enabled: true },
+                { name: 'Job Alert Morning', time: '0 8 * * *', enabled: true },
+                { name: 'Job Alert Evening', time: '0 18 * * *', enabled: false }
+            ]
+        };
+
+        // ===== Avatars =====
+        const AVATARS = ['👨‍💻', '👩‍💻', '🤖', '🧙', '🦸', '🧑‍🎨', '🧑‍🔬', '👨‍🚀'];
+        
+        // ===== Agent Info =====
+        const AGENT_INFO = {
+            'snow': { name: '雪', role: '主要 AI 助手', emoji: '❄️', description: '主要對話代理，負責日常任務協調' },
+            'main': { name: 'Main', role: '系統主代理', emoji: '🏠', description: '系統主代理，負責排程和工作流' },
+            'salmon': { name: 'Salmon', role: '專案代理', emoji: '🐟', description: '專案執行代理，專注於特定任務' },
+            'job-hunter': { name: 'Job Hunter', role: '職涯代理', emoji: '🎯', description: '求職輔助代理，掃描職缺資訊' }
+        };
+
+        // ===== State =====
+        let selectedAvatar = AVATARS[0];
+        let characterName = '';
+        
+        // ===== Initialize =====
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCharacter();
+            initTabs();
+            initAvatarGrid();
+            initCharacterCreator();
+            renderDashboard();
+            renderEmployees();
+        });
+
+        // ===== Tabs =====
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Update tab buttons
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Update tab content
+                    const tabId = tab.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // ===== Avatar Grid =====
+        function initAvatarGrid() {
+            const grid = document.getElementById('avatarGrid');
+            AVATARS.forEach(avatar => {
+                const div = document.createElement('div');
+                div.className = 'avatar-option' + (avatar === selectedAvatar ? ' selected' : '');
+                div.textContent = avatar;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                    selectedAvatar = avatar;
+                    updatePreview();
+                });
+                grid.appendChild(div);
+            });
+        }
+
+        // ===== Character Creator =====
+        function initCharacterCreator() {
+            const nameInput = document.getElementById('characterName');
+            const saveBtn = document.getElementById('saveCharacter');
+
+            nameInput.addEventListener('input', (e) => {
+                characterName = e.target.value;
+                updatePreview();
+            });
+
+            saveBtn.addEventListener('click', saveCharacter);
+        }
+
+        function updatePreview() {
+            const previewSection = document.getElementById('characterPreviewSection');
+            if (characterName.trim()) {
+                previewSection.style.display = 'block';
+                document.getElementById('previewAvatar').textContent = selectedAvatar;
+                document.getElementById('previewName').textContent = characterName;
+            } else {
+                previewSection.style.display = 'none';
+            }
+        }
+
+        function saveCharacter() {
+            if (!characterName.trim()) {
+                alert('請輸入角色名稱！');
+                return;
+            }
+            const data = { avatar: selectedAvatar, name: characterName };
+            localStorage.setItem('pixelCharacter', JSON.stringify(data));
+            alert('角色已儲存！ 🎉');
+        }
+
+        function loadCharacter() {
+            const saved = localStorage.getItem('pixelCharacter');
+            if (saved) {
+                const data = JSON.parse(saved);
+                selectedAvatar = data.avatar;
+                characterName = data.name;
+            }
+        }
+
+        // ===== Dashboard =====
+        function renderDashboard() {
+            const activeSchedules = OPENCLAW_DATA.schedules.filter(s => s.enabled).length;
+            
+            document.getElementById('agentCount').textContent = OPENCLAW_DATA.agents.length;
+            document.getElementById('skillCount').textContent = OPENCLAW_DATA.skills.length;
+            document.getElementById('scheduleCount').textContent = OPENCLAW_DATA.schedules.length;
+            document.getElementById('activeJobs').textContent = activeSchedules;
+        }
+
+        // ===== Employees =====
+        function renderEmployees() {
+            const list = document.getElementById('employeeList');
+            
+            OPENCLAW_DATA.agents.forEach(agentId => {
+                const info = AGENT_INFO[agentId] || { name: agentId, role: 'Unknown', emoji: '❓' };
+                
+                const card = document.createElement('div');
+                card.className = 'employee-card';
+                card.innerHTML = `
+                    <div class="employee-avatar">${info.emoji}</div>
+                    <div class="employee-info">
+                        <div class="employee-name">${info.name}</div>
+                        <div class="employee-role">${info.role}</div>
+                    </div>
+                `;
+                card.addEventListener('click', () => showEmployeeModal(agentId, info));
+                list.appendChild(card);
+            });
+        }
+
+        function showEmployeeModal(agentId, info) {
+            const modal = document.getElementById('modalOverlay');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = `${info.emoji} ${info.name}`;
+            
+            // Get skills for this agent (simplified - assign some skills to each)
+            const skills = getSkillsForAgent(agentId);
+            
+            // Get schedules for this agent
+            const schedules = OPENCLAW_DATA.schedules.filter(s => true); // Show all for demo
+            
+            body.innerHTML = `
+                <p style="margin-bottom: 16px; color: var(--pixel-text-dim);">${info.description}</p>
+                
+                <h4 style="margin-bottom: 8px;">📦 技能 (${skills.length})</h4>
+                <div class="skills-list">
+                    ${skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                </div>
+                
+                <h4 style="margin: 16px 0 8px;">🕐 排程任務 (${schedules.length})</h4>
+                <div class="schedule-list">
+                    ${schedules.map(s => `
+                        <div class="schedule-item">
+                            <div class="name">${s.name}</div>
+                            <div class="time">${s.time} ${s.enabled ? '✅' : '⏸️'}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            
+            document.getElementById('modalClose').onclick = () => {
+                modal.classList.remove('active');
+            };
+            
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            };
+        }
+
+        function getSkillsForAgent(agentId) {
+            // Distribute skills among agents for demo
+            const skillGroups = {
+                'snow': OPENCLAW_DATA.skills.slice(0, 20),
+                'main': OPENCLAW_DATA.skills.slice(20, 40),
+                'salmon': OPENCLAW_DATA.skills.slice(40, 55),
+                'job-hunter': ['job-hunter', 'marketing-twitter-engager', 'web_search']
+            };
+            return skillGroups[agentId] || OPENCLAW_DATA.skills.slice(0, 10);
+        }
+    </script>
+</body>
+</html>

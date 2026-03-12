@@ -1,0 +1,64 @@
+{
+  "coins": 1500,
+  "energy": 100,
+  "max_energy": 120,
+  "reputation": 0,
+  "level": 2,
+  "experience": 500,
+  "total_tasks_completed": 15,
+  "total_rolls": 1,
+  "employees": [
+    {
+      "name": "阿宇",
+      "role": "財務",
+      "skill": "財務管理",
+      "efficiency": 0.97,
+      "salary": 138,
+      "rarity": "普通",
+      "skill_level": 1,
+      "experience": 0,
+      "id": 1,
+      "hired_at": "2026-03-12",
+      "level": 1
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "解答產品問題",
+      "category": "客服",
+      "difficulty": "普通",
+      "reward_coins": 90,
+      "reward_exp": 45,
+      "energy_cost": 20,
+      "token_cost": 30,
+      "status": "pending",
+      "assigned_to": null,
+      "created_at": "2026-03-12T10:21:11.540806",
+      "completed_at": null,
+      "is_daily": false,
+      "is_weekly": false,
+      "is_emergency": false
+    }
+  ],
+  "achievements": [
+    "first_task",
+    "ten_tasks"
+  ],
+  "skills": {
+    "coding": 1,
+    "design": 1,
+    "marketing": 1,
+    "sales": 1,
+    "service": 1
+  },
+  "gacha_history": [
+    {
+      "rarity": "普通",
+      "employee": "阿宇",
+      "role": "財務",
+      "timestamp": "2026-03-12T10:21:11.539770"
+    }
+  ],
+  "created_at": "2026-03-12T10:17:56.095635"
+}
